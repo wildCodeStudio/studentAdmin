@@ -90,7 +90,7 @@ export const asyncRoutes = [
         path: 'index',
         name: 'Createuser',
         component: () => import('@/views/createuser/index'),
-        meta: { roles: ['vvv'], title: 'Form', icon: 'form' }
+        meta: { roles: ['vvv'], title: '创建用户', icon: 'form' }
       }
     ]
   },

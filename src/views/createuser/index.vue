@@ -42,6 +42,13 @@ export default {
       if (!value) {
         return callback(new Error("账户不能为空"));
       }
+      if (
+        this.ruleForm.name !== "" &&
+        this.ruleForm.pass !== this.ruleForm.name.substring(12)
+      ) {
+        this.ruleForm.pass = "";
+        this.ruleForm.checkPass = "";
+      }
       if (isCarID(value) !== true) {
         callback(new Error(isCarID(value)));
       } else {
