@@ -44,7 +44,8 @@ service.interceptors.response.use(async response => {
     })
     if (res.code === 5005) {
       await store.dispatch('user/logout')
-      return router.push(`/login`)
+      router.push(`/login`)
+      return false
     }
     // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
     if (res.code === 50008 || res.code === 50012 || res.code === 50014) {

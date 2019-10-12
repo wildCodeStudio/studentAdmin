@@ -30,8 +30,6 @@ router.beforeEach(async (to, from, next) => {
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
         const isLogin = await store.dispatch('user/getInfo')
-        console.log(isLogin);
-
         next()
       } else {
         try {
