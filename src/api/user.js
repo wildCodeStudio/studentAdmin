@@ -1,28 +1,29 @@
 import request from '@/utils/request'
 import axios from 'axios'
+// 登录
 export function login(data) {
   return request({
-    url: 'http://localhost:3000/login',
+    url: 'http://132.232.89.22:8998/login',
     method: 'post',
     data
   })
 }
-
+// 获取用户信息
 export function getInfo(token) {
   return request({
-    url: 'http://localhost:3000/getadmin',
+    url: 'http://132.232.89.22:8998/getadmin',
     method: 'get',
     params: { token }
   })
 }
-
+// 退出登录
 export function logout() {
   return request({
-    url: 'http://localhost:3000/logout',
+    url: 'http://132.232.89.22:8998/logout',
     method: 'post'
   })
 }
-
+// 创建用户
 export function createUser(data) {
-  return axios.post('http://localhost:3000/register', data)
+  return axios.post('http://132.232.89.22:8998/register', data)
 }
