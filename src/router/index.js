@@ -43,7 +43,6 @@ export const constantRoutes = [
     component: () => import("@/views/404"),
     hidden: true
   },
-
   {
     path: "/",
     component: Layout,
@@ -56,14 +55,34 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: "dashboard",
+        path: "/dashboard",
         name: "Dashboard",
         component: () => import("@/views/dashboard/index"),
-        meta: { title: "Dashboard", icon: "dashboard" }
+        meta: { title: "所有学生", icon: "dashboard" }
       }
     ]
   },
-
+  {
+    path: "/studCaozuo",
+    component: Layout,
+    redirect: "/studCaozuo/addstudent",
+    name: "studCaozuo",
+    meta: { title: "学生操作", icon: "example" },
+    children: [
+      {
+        path: "/studCaozuo/addstudent",
+        name: "Add",
+        component: () => import("@/views/AddAllStudents/index"),
+        meta: { title: "添加学生", icon: "table" }
+      }
+      // {
+      //   path: "tree",
+      //   name: "Tree",
+      //   component: () => import("@/views/tree/index"),
+      //   meta: { title: "Tree", icon: "tree" }
+      // }
+    ]
+  },
   {
     path: "/example",
     component: Layout,
