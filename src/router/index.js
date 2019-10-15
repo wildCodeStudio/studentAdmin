@@ -75,12 +75,6 @@ export const constantRoutes = [
         component: () => import("@/views/AddAllStudents/index"),
         meta: { title: "添加学生", icon: "table" }
       }
-      // {
-      //   path: "tree",
-      //   name: "Tree",
-      //   component: () => import("@/views/tree/index"),
-      //   meta: { title: "Tree", icon: "tree" }
-      // }
     ]
   }
 
@@ -101,8 +95,27 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/headTeacher',
+    component: Layout,
+    redirect: "/headTeacher/headTeacherList",
+    meta: { title: '班主任', icon: 'form' },
+    children: [
+      {
+        path: 'headTeacherList',
+        name: 'HeadTeacher',
+        component: () => import('@/views/headTeacher/index'),
+        meta: { title: '班主任列表', icon: 'form' }
+      },
+      {
+        path: 'addHeadTeacher',
+        name: 'AddHeadTeacher',
+        component: () => import('@/views/headTeacher/addHeadTeacher'),
+        meta: { roles: ['vvv'], title: '添加班主任', icon: 'form' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
-
   { path: '*', redirect: '/404', hidden: true }
 ]
 const createRouter = () => new Router({
