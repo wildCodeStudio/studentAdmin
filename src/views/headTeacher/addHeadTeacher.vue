@@ -104,7 +104,10 @@ export default {
     },
     // 清空信息
     clearList() {
-      (this.newName = ""), (this.sex = ""), (this.collegeCenter = "");
+      (this.newName = ""),
+        (this.sex = ""),
+        (this.collegeCenter = ""),
+        (this.entryDate = "");
     }
   }
 };
