@@ -1,21 +1,20 @@
 <template>
   <div>
-    <input
-      ref="excel-upload-input"
-      class="excel-upload-input"
-      type="file"
-      accept=".xlsx, .xls"
-      @change="handleClick"
-    />
-    <div class="drop" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
+    <input ref="excel-upload-input"
+           class="excel-upload-input"
+           type="file"
+           accept=".xlsx, .xls"
+           @change="handleClick" />
+    <div class="drop"
+         @drop="handleDrop"
+         @dragover="handleDragover"
+         @dragenter="handleDragover">
       点击导入你想要的Excel表
-      <el-button
-        :loading="loading"
-        style="margin-left:16px;"
-        size="mini"
-        type="primary"
-        @click="handleUpload"
-      >Borwser</el-button>
+      <el-button :loading="loading"
+                 style="margin-left:16px;"
+                 size="mini"
+                 type="primary"
+                 @click="handleUpload">Borwser</el-button>
     </div>
   </div>
 </template>
