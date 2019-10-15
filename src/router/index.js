@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from "@/layout";
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -32,47 +32,48 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
+    path: "/login",
+    component: () => import("@/views/login/index"),
+    hidden: true
+    // hidden表示当前路由项在项目导航条中是否隐藏
+  },
+
+  {
+    path: "/404",
+    component: () => import("@/views/404"),
     hidden: true
   },
-
   {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
-
-  {
-    path: '/',
+    path: "/",
     component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
-  },
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    redirect: "/home",
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: "/home",
+        name: "Home",
+        component: () => import("@/views/home/home"),
+        hidden: true
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: "/dashboard",
+        name: "Dashboard",
+        component: () => import("@/views/dashboard/index"),
+        meta: { title: "所有学生", icon: "dashboard" }
+      }
+    ]
+  },
+  {
+    path: "/studCaozuo",
+    component: Layout,
+    redirect: "/studCaozuo/addstudent",
+    name: "studCaozuo",
+    meta: { title: "学生操作", icon: "example" },
+    children: [
+      {
+        path: "/studCaozuo/addstudent",
+        name: "Add",
+        component: () => import("@/views/AddAllStudents/index"),
+        meta: { title: "添加学生", icon: "table" }
       }
     ]
   }
@@ -94,8 +95,27 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/headTeacher',
+    component: Layout,
+    redirect: "/headTeacher/headTeacherList",
+    meta: { title: '班主任', icon: 'form' },
+    children: [
+      {
+        path: 'headTeacherList',
+        name: 'HeadTeacher',
+        component: () => import('@/views/headTeacher/index'),
+        meta: { title: '班主任列表', icon: 'form' }
+      },
+      {
+        path: 'addHeadTeacher',
+        name: 'AddHeadTeacher',
+        component: () => import('@/views/headTeacher/addHeadTeacher'),
+        meta: { roles: ['vvv'], title: '添加班主任', icon: 'form' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
-
   { path: '*', redirect: '/404', hidden: true }
 ]
 const createRouter = () => new Router({
@@ -104,12 +124,12 @@ const createRouter = () => new Router({
   routes: constantRoutes
 })
 
-const router = createRouter()
+const router = createRouter();
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
 }
 
-export default router
+export default router;
