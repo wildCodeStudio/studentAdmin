@@ -1,18 +1,21 @@
 <template>
-  <div class="home-box-bs-002"></div>
+  <div class="dashboard-editor-container">
+    <!-- <el-row>
+      <Echars />
+    </el-row>-->
+    <el-row style="background:#fff;padding:16px 16px 0;">
+      <EcharsZhu />
+    </el-row>
+  </div>
 </template>
 
 <script>
-export default {};
+// import Echars from "./echars/echars";
+import EcharsZhu from "./echars/echarszhu";
+export default {
+  components: {
+    // Echars,
+    EcharsZhu
+  }
+};
 </script>
-
-<style scoped>
-.home-box-bs-002 {
-  width: 100%;
-  height: 800px;
-  margin: 20px auto 0px;
-  background: url(../../assets/welcome_image/welcome.png) no-repeat;
-  background-position: center;
-  background-size: cover;
-}
-</style>
