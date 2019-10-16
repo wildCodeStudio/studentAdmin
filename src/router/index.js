@@ -51,197 +51,117 @@ export const constantRoutes = [
     //重定向，在element-admin会出现以下问题：element-admin里默认规定根路径是Dashboard，就是头部的那个显示路径的条条的根路径是Dashboard，
     // 你需要在路由中加上name属性，才能在点击头部Dashboard的时候不报404(找不到Dashboard对应的模块)，而加上name之后你点击头部Dashboard的时候会跳至你当前的
     // path路径，在这里跳到的studentCaozuo只是一个父路由并没有对应模块展示的作用，加上重定向是为了让点击头部Dashboard的时候不会显示一个没有对应模块的空白页
-    name: "Dashboard",
-    meta: { title: "首页", icon: "example" },
     children: [
       //子路由只有一项左侧导航就只显示一项，有两项以上就显示为下拉导航菜单形式
       {
         path: "/home",
         name: "Home",
         component: () => import("@/views/home/home"),
-        hidden: true //是否在左侧导航隐藏
+        meta: { title: "首页", icon: "example" }
       }
     ]
   },
   {
     path: "/studCaozuo",
     component: Layout,
-    redirect: "/studCaozuo/",
-    name: "Dashboard",
+    redirect: "/studCaozuo/dashboard",
     meta: { title: "学生操作", icon: "example" },
     children: [
       {
-        path: "/studCaozuo/dashboard",
+        path: "/dashboard",
         name: "All",
         component: () => import("@/views/dashboard/index"),
         meta: { title: "所有学生", icon: "dashboard" }
       },
       {
-        path: "/studCaozuo/addstudent",
+        path: "/addstudent",
         name: "Add",
         component: () => import("@/views/AddAllStudents/index"),
         meta: { title: "添加学生", icon: "table" }
       }
     ]
-  },
+  }
 
-  // {
-  //   path: "/",
-  //   component: Layout,
-  //   redirect: "/home",
-  //   children: [
-  //     {
-  //       path: "/home",
-  //       name: "Home",
-  //       component: () => import("@/views/home/home"),
-  //       hidden: true,
-  //       meta: { title: "首页", icon: "dashboard" }
-  //     },
-  //     {
-  //       path: "/dashboard",
-  //       name: "Dashboard",
-  //       component: () => import("@/views/dashboard/index"),
-  //       meta: { title: "所有学生", icon: "dashboard" }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: "/studCaozuo",
-  //   component: Layout,
-  //   redirect: "/studCaozuo/addstudent",
-  //   name: "studCaozuo",
-  //   meta: { title: "学生操作", icon: "example" },
-  //   children: [
-  //     {
-  //       path: "/studCaozuo/addstudent",
-  //       name: "Add",
-  //       component: () => import("@/views/AddAllStudents/index"),
-  //       meta: { title: "添加学生", icon: "table" }
-  //     }
-  //     // {
-  //     //   path: "tree",
-  //     //   name: "Tree",
-  //     //   component: () => import("@/views/tree/index"),
-  //     //   meta: { title: "Tree", icon: "tree" }
-  //     // }
-  //   ]
-  // },
+]
+export const asyncRoutes = [
   {
-    path: "/example",
+    path: '/createuser',
     component: Layout,
-    redirect: "/example/table",
-    name: "Example",
-    meta: { title: "Example", icon: "example" },
-    children: [
-      {
-        path: "table",
-        name: "Table",
-        component: () => import("@/views/table/index"),
-        meta: { title: "Table", icon: "table" }
-      },
-      {
-        path: "tree",
-        name: "Tree",
-        component: () => import("@/views/tree/index"),
-        meta: { title: "Tree", icon: "tree" }
-      }
-    ]
-  },
-
-  {
-    path: "/form",
-    component: Layout,
-    children: [
-      {
-        path: "index",
-        name: "Form",
-        component: () => import("@/views/form/index"),
-        meta: { title: "Form", icon: "form" }
-      }
-    ]
-  },
-
-  {
-    path: "/nested",
-    component: Layout,
-    redirect: "/nested/menu1",
-    name: "Nested",
     meta: {
-      title: "Nested",
-      icon: "nested"
+      roles: ['vvv'] // you can set roles in root nav
     },
     children: [
       {
-        path: "menu1",
-        component: () => import("@/views/nested/menu1/index"), // Parent router-view
-        name: "Menu1",
-        meta: { title: "Menu1" },
-        children: [
-          {
-            path: "menu1-1",
-            component: () => import("@/views/nested/menu1/menu1-1"),
-            name: "Menu1-1",
-            meta: { title: "Menu1-1" }
-          },
-          {
-            path: "menu1-2",
-            component: () => import("@/views/nested/menu1/menu1-2"),
-            name: "Menu1-2",
-            meta: { title: "Menu1-2" },
-            children: [
-              {
-                path: "menu1-2-1",
-                component: () =>
-                  import("@/views/nested/menu1/menu1-2/menu1-2-1"),
-                name: "Menu1-2-1",
-                meta: { title: "Menu1-2-1" }
-              },
-              {
-                path: "menu1-2-2",
-                component: () =>
-                  import("@/views/nested/menu1/menu1-2/menu1-2-2"),
-                name: "Menu1-2-2",
-                meta: { title: "Menu1-2-2" }
-              }
-            ]
-          },
-          {
-            path: "menu1-3",
-            component: () => import("@/views/nested/menu1/menu1-3"),
-            name: "Menu1-3",
-            meta: { title: "Menu1-3" }
-          }
-        ]
-      },
-      {
-        path: "menu2",
-        component: () => import("@/views/nested/menu2/index"),
-        meta: { title: "menu2" }
+        path: 'index',
+        name: 'Createuser',
+        component: () => import('@/views/createuser/index'),
+        meta: { roles: ['vvv'], title: '创建用户', icon: 'form' }
       }
     ]
   },
-
   {
-    path: "external-link",
+    path: '/headTeacher',
     component: Layout,
+    redirect: "/headTeacher/headTeacherList",
+    meta: { title: '班主任', icon: 'form' },
     children: [
       {
-        path: "https://panjiachen.github.io/vue-element-admin-site/#/",
-        meta: { title: "External Link", icon: "link" }
+        path: 'headTeacherList',
+        name: 'HeadTeacher',
+        component: () => import('@/views/headTeacher/index'),
+        meta: { title: '班主任列表', icon: 'form' }
+      },
+      {
+        path: 'addHeadTeacher',
+        name: 'AddHeadTeacher',
+        component: () => import('@/views/headTeacher/addHeadTeacher'),
+        meta: { roles: ['vvv'], title: '添加班主任', icon: 'form' }
       }
     ]
   },
-
+  {
+    path: '/class',
+    component: Layout,
+    redirect: "/class/classList",
+    meta: { title: '班级', icon: 'form' },
+    children: [
+      {
+        path: 'classList',
+        name: 'Class',
+        component: () => import('@/views/class/index'),
+        meta: { title: '班级列表', icon: 'form' }
+      },
+      {
+        path: 'createClass',
+        name: 'CreateClass',
+        component: () => import('@/views/class/createClass'),
+        meta: { roles: ['vvv'], title: '创建班级', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/market',
+    component: Layout,
+    meta: {
+      roles: ['vvv']
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'Market',
+        component: () => import('@/views/market/index'),
+        meta: { roles: ['vvv'], title: '市场部', icon: 'form' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
-  { path: "*", redirect: "/404", hidden: true }
-];
-
-const createRouter = () =>
-  new Router({
-    // mode: 'history', // require service support
-    scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
-  });
+  { path: '*', redirect: '/404', hidden: true }
+]
+const createRouter = () => new Router({
+  // mode: 'history', // require service support
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRoutes
+})
 
 const router = createRouter();
 

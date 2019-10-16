@@ -1,24 +1,29 @@
 import request from '@/utils/request'
-
+import axios from 'axios'
+// 登录
 export function login(data) {
   return request({
-    url: '/user/login',
+    url: 'http://127.0.0.1:8998/login',
     method: 'post',
     data
   })
 }
-
+// 获取用户信息
 export function getInfo(token) {
   return request({
-    url: '/user/info',
+    url: 'http://127.0.0.1:8998/getadmin',
     method: 'get',
     params: { token }
   })
 }
-
+// 退出登录
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: 'http://127.0.0.1:8998/logout',
     method: 'post'
   })
+}
+// 创建用户
+export function createUser(data) {
+  return axios.post('http://127.0.0.1:8998/register', data)
 }
