@@ -51,33 +51,30 @@ export const constantRoutes = [
     //重定向，在element-admin会出现以下问题：element-admin里默认规定根路径是Dashboard，就是头部的那个显示路径的条条的根路径是Dashboard，
     // 你需要在路由中加上name属性，才能在点击头部Dashboard的时候不报404(找不到Dashboard对应的模块)，而加上name之后你点击头部Dashboard的时候会跳至你当前的
     // path路径，在这里跳到的studentCaozuo只是一个父路由并没有对应模块展示的作用，加上重定向是为了让点击头部Dashboard的时候不会显示一个没有对应模块的空白页
-    name: "Dashboard",
-    meta: { title: "首页", icon: "example" },
     children: [
       //子路由只有一项左侧导航就只显示一项，有两项以上就显示为下拉导航菜单形式
       {
         path: "/home",
         name: "Home",
         component: () => import("@/views/home/home"),
-        hidden: true //是否在左侧导航隐藏
+        meta: { title: "首页", icon: "example" }
       }
     ]
   },
   {
     path: "/studCaozuo",
     component: Layout,
-    redirect: "/studCaozuo/",
-    name: "Dashboard",
+    redirect: "/studCaozuo/dashboard",
     meta: { title: "学生操作", icon: "example" },
     children: [
       {
-        path: "/studCaozuo/dashboard",
+        path: "/dashboard",
         name: "All",
         component: () => import("@/views/dashboard/index"),
         meta: { title: "所有学生", icon: "dashboard" }
       },
       {
-        path: "/studCaozuo/addstudent",
+        path: "/addstudent",
         name: "Add",
         component: () => import("@/views/AddAllStudents/index"),
         meta: { title: "添加学生", icon: "table" }

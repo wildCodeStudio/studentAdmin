@@ -87,9 +87,6 @@
         </div>
       </el-col>
     </el-row>
-    <!-- <el-row>
-      <Echars />
-    </el-row>-->
     <el-row style="background:#fff;padding:16px 16px 0;">
       <EcharsZhu />
     </el-row>
