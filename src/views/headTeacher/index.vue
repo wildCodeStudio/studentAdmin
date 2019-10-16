@@ -71,8 +71,6 @@ export default {
           });
         })
         .catch(err => {
-          console.log(err);
-
           this.$message({
             type: "info",
             message: "已取消删除"

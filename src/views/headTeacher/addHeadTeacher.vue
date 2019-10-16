@@ -94,13 +94,14 @@ export default {
       if (obj.headname === "" || obj.headsex === "" || obj.college === "")
         return this.$message.error("提交信息中存在空项");
       let { data } = await addHeadTeacher(obj);
-      if (data.code === 203) {
-        return this.$message.error(data.message);
+      if (data.code === 200) {
+        this.$message.success(data.message);
+        setTimeout(() => {
+          this.clearList();
+        }, 500);
+        return;
       }
-      this.$message.success(data.message);
-      setTimeout(() => {
-        this.clearList();
-      }, 500);
+      this.$message.error(data.message);
     },
     // 清空信息
     clearList() {

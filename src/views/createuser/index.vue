@@ -8,11 +8,13 @@
              class="demo-ruleForm">
       <el-form-item label="名称"
                     prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
+        <el-input v-model="ruleForm.name"
+                  placeholder="请输入身份证号"></el-input>
       </el-form-item>
       <el-form-item label="密码"
                     prop="pass">
         <el-input type="password"
+                  placeholder="默认为身份证号后六位"
                   v-model="ruleForm.pass"
                   autocomplete="off"></el-input>
       </el-form-item>

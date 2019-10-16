@@ -115,6 +115,41 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/class',
+    component: Layout,
+    redirect: "/class/classList",
+    meta: { title: '班级', icon: 'form' },
+    children: [
+      {
+        path: 'classList',
+        name: 'Class',
+        component: () => import('@/views/class/index'),
+        meta: { title: '班级列表', icon: 'form' }
+      },
+      {
+        path: 'createClass',
+        name: 'CreateClass',
+        component: () => import('@/views/class/createClass'),
+        meta: { roles: ['vvv'], title: '创建班级', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/market',
+    component: Layout,
+    meta: {
+      roles: ['vvv']
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'Market',
+        component: () => import('@/views/market/index'),
+        meta: { roles: ['vvv'], title: '市场部', icon: 'form' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
