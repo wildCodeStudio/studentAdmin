@@ -62,7 +62,7 @@
         style="margin-left:15px;width:70%;display:flex;justify-content: space-between;margin-top:30px;"
       >
         <div>挂科次数：</div>
-        <el-input size="mini" placeholder="挂科次数" v-model="Fail"></el-input>
+        <el-input size="mini" placeholder="挂科次数/次" v-model="Fail"></el-input>
       </div>
       <div>
         <el-button
@@ -149,41 +149,51 @@ export default {
         age: this.newAge,
         study: this.study,
         major: this.major,
-        class: this.newclass,
-        cityCenter: this.cityCenter,
+        classes: this.newclass,
+        citycenter: this.cityCenter,
         chengji: this.chengji,
-        Fail: this.Fail
+        failss: this.Fail
       };
-      let success = await addAllStudent(obj);
-      if (success.data.code === 201) {
-        this.$message.error(success.data.msg);
+      if (/.*[\u4e00-\u9fa5]+.*$/.test(this.chengji)) {
+        //判断不带汉字的正则
+        this.$message.error("成绩不必带单位");
+        return false;
+      } else if (/.*[\u4e00-\u9fa5]+.*$/.test(this.Fail)) {
+        //判断不带汉字的正则
+        this.$message.error("挂科次数不必带单位");
+        return false;
       } else {
-        (this.newName = ""),
-          (this.sex = ""),
-          (this.newAge = ""),
-          (this.study = ""),
-          (this.major = ""),
-          (this.newclass = ""),
-          (this.cityCenter = ""),
-          (this.chengji = ""),
-          (this.Fail = "");
-        this.$confirm(`${success.data.msg},是否跳转至学生列表页`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            this.$router.push({
-              name: "Dashboard",
-              params: { maxpage: success.data.maxpages }
-            }); //如果想在push里传递params参数，就必须用路由对应的name跳转
+        let success = await addAllStudent(obj);
+        if (success.data.code === 201) {
+          this.$message.error(success.data.msg);
+        } else {
+          (this.newName = ""),
+            (this.sex = ""),
+            (this.newAge = ""),
+            (this.study = ""),
+            (this.major = ""),
+            (this.newclass = ""),
+            (this.cityCenter = ""),
+            (this.chengji = ""),
+            (this.Fail = "");
+          this.$confirm(`${success.data.msg},是否跳转至学生列表页`, "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
           })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "取消舔砖"
+            .then(() => {
+              this.$router.push({
+                name: "All",
+                params: { maxpage: success.data.maxpages }
+              }); //如果想在push里传递params参数，就必须用路由对应的name跳转
+            })
+            .catch(() => {
+              this.$message({
+                type: "info",
+                message: "取消跳转"
+              });
             });
-          });
+        }
       }
     },
     clearList() {

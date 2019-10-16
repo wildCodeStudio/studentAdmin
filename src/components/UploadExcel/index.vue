@@ -9,7 +9,7 @@
          @drop="handleDrop"
          @dragover="handleDragover"
          @dragenter="handleDragover">
-      点击导入你想要的Excel表
+      点击导入或拖拽至此区域
       <el-button :loading="loading"
                  style="margin-left:16px;"
                  size="mini"
