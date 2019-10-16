@@ -60,26 +60,6 @@ export const constantRoutes = [
         meta: { title: "首页", icon: "example" }
       }
     ]
-  },
-  {
-    path: "/studCaozuo",
-    component: Layout,
-    redirect: "/studCaozuo/dashboard",
-    meta: { title: "学生操作", icon: "example" },
-    children: [
-      {
-        path: "/dashboard",
-        name: "All",
-        component: () => import("@/views/dashboard/index"),
-        meta: { title: "所有学生", icon: "dashboard" }
-      },
-      {
-        path: "/addstudent",
-        name: "Add",
-        component: () => import("@/views/AddAllStudents/index"),
-        meta: { title: "添加学生", icon: "table" }
-      }
-    ]
   }
 
 ]
@@ -99,23 +79,24 @@ export const asyncRoutes = [
       }
     ]
   },
+
   {
-    path: '/headTeacher',
+    path: "/studCaozuo",
     component: Layout,
-    redirect: "/headTeacher/headTeacherList",
-    meta: { title: '班主任', icon: 'form' },
+    redirect: "/studCaozuo/dashboard",
+    meta: { title: "学生操作", icon: "example" },
     children: [
       {
-        path: 'headTeacherList',
-        name: 'HeadTeacher',
-        component: () => import('@/views/headTeacher/index'),
-        meta: { title: '班主任列表', icon: 'form' }
+        path: "/dashboard",
+        name: "All",
+        component: () => import("@/views/dashboard/index"),
+        meta: { title: "所有学生", icon: "dashboard" }
       },
       {
-        path: 'addHeadTeacher',
-        name: 'AddHeadTeacher',
-        component: () => import('@/views/headTeacher/addHeadTeacher'),
-        meta: { roles: ['vvv'], title: '添加班主任', icon: 'form' }
+        path: "/addstudent",
+        name: "Add",
+        component: () => import("@/views/AddAllStudents/index"),
+        meta: { roles: ['vvv'], title: "添加学生", icon: "table" }
       }
     ]
   },
@@ -136,6 +117,26 @@ export const asyncRoutes = [
         name: 'CreateClass',
         component: () => import('@/views/class/createClass'),
         meta: { roles: ['vvv'], title: '创建班级', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/headTeacher',
+    component: Layout,
+    redirect: "/headTeacher/headTeacherList",
+    meta: { title: '班主任', icon: 'form' },
+    children: [
+      {
+        path: 'headTeacherList',
+        name: 'HeadTeacher',
+        component: () => import('@/views/headTeacher/index'),
+        meta: { title: '班主任列表', icon: 'form' }
+      },
+      {
+        path: 'addHeadTeacher',
+        name: 'AddHeadTeacher',
+        component: () => import('@/views/headTeacher/addHeadTeacher'),
+        meta: { roles: ['vvv'], title: '添加班主任', icon: 'form' }
       }
     ]
   },
