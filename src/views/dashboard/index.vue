@@ -213,9 +213,15 @@
       layout="prev, pager, next"
       :total="total"
     ></el-pagination>
-    <div style="position:absolute;right:0;bottom:100px;right:10px;">
+    <div style="position:absolute;right:0;top:450px;right:10px;">
       <el-button size="mini" type="warning" round @click="excelShow">{{excelshow?"取消导入":"导入excel"}}</el-button>
-      <el-button size="mini" type="success" round>导出当前excel</el-button>
+      <el-button
+        size="mini"
+        :loading="exportLodding"
+        type="success"
+        round
+        @click="outExcel"
+      >导出当页excel</el-button>
     </div>
     <!-- 导入Excel模块 -->
     <div class="app-container" v-show="excelshow">
@@ -238,6 +244,7 @@ export default {
   components: { UploadExcelComponent },
   data() {
     return {
+      exportLodding: false,
       listLoading: true, //加载状态
       excelshow: false, //导入Excel模块是否显示
       tableData: [], //所有学生数据
@@ -252,6 +259,7 @@ export default {
       upage: "", //要修改的年龄
       upstudy: "", //要修改的学制
       pageShow: true, //分页是否显示
+      daochuexcel: false, //在导出excel的时候需要进行的判断，判断当你是搜索状态时为true(点击了搜索按钮才为true)才能导出
       search: {
         // 搜索的v-model绑定值
         serName: "",
@@ -673,6 +681,7 @@ export default {
     // 取消搜索
     async quxiaoSearch() {
       this.searchShow = 2;
+      this.daochuexcel = true;
       this.pageShow = true;
       let allList = await getAllPage(1);
       this.tableData = allList.data.data;
@@ -700,6 +709,7 @@ export default {
         this.$message.error("成绩不要带单位");
         return false;
       } else {
+        this.daochuexcel = true;
         let obj = {};
         for (let key in this.search) {
           if (this.search.hasOwnProperty(key)) {
@@ -821,6 +831,76 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    // 导出Excel
+    outExcel() {
+      if (this.searchShow === 1) {
+        //处于搜索情况下
+        if (
+          this.search.serName == "" &&
+          this.search.serStudy == "" &&
+          this.search.serMajor == "" &&
+          this.search.serClasses == "" &&
+          this.search.sercityCenter == "" &&
+          this.search.serchengji == "" &&
+          this.search.serFailss == ""
+        ) {
+          this.$message.error("搜索不能全部为空");
+          this.excelshow = false; //不在则不显示导入框
+          return false;
+        } else if (!this.daochuexcel) {
+          this.$message.error("请完成搜索后再进行导出");
+        } else {
+          this.exportExcel();
+        }
+      } else {
+        this.exportExcel();
+      }
+    },
+    // 导出函数
+    exportExcel() {
+      this.exportLodding = true;
+      import("@/ExoprtExcel/exportExcel").then(excel => {
+        const tHeader = [
+          "姓名",
+          "性别",
+          "年龄",
+          "学制",
+          "专业",
+          "班级",
+          "市场部",
+          "成绩",
+          "挂科次数"
+        ];
+        const filterVal = [
+          "name",
+          "sex",
+          "age",
+          "study",
+          "major",
+          "classes",
+          "citycenter",
+          "chengji",
+          "failss"
+        ];
+        const data = this.formatJson(filterVal, this.tableData);
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: "学生信息",
+          autoWidth: true,
+          bookType: "xlsx"
+        });
+        this.exportLodding = false;
+      });
+    },
+    // 导出需要配合的函数，进行头部和数据的一一对应赋值
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v =>
+        filterVal.map(j => {
+          return v[j];
+        })
+      );
     }
   }
 };
