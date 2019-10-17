@@ -5,7 +5,7 @@
       <el-form :model="ruleForm"
                :rules="rules"
                ref="ruleForm"
-               label-width="80px"
+               label-width="100px"
                label-position="left"
                class="demo-ruleForm">
         <el-form-item label="班级名称"
