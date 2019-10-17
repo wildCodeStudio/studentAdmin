@@ -7,6 +7,12 @@ export let getAll = () => {
 export let getAllPage = page => {
   return Axios.post("http://localhost:8998/allstudentPage", { page: page });
 };
+// 导入Excel
+export let inExcel = excarr => {
+  return Axios.post("http://localhost:8998/inExcel", {
+    excarr
+  });
+};
 // 向所有学生表中添加一项
 export let addAllStudent = studentlist => {
   return Axios.post("http://localhost:8998/addallStudent", {
@@ -44,13 +50,13 @@ export let getHeadTeacher = () => {
   return Axios.get("http://localhost:8998/getHeadTeacher");
 };
 // 添加一条班主任
-export let addHeadTeacher = (list) => {
+export let addHeadTeacher = list => {
   return Axios.post("http://localhost:8998/addHeadTeacher", {
     ...list
   });
 };
 // 删除一条班主任
-export let delHeadTeacher = (id) => {
+export let delHeadTeacher = id => {
   return Axios.post("http://localhost:8998/delHeadTeacher", { _id: id });
 };
 // 获取所有市场部
@@ -62,14 +68,14 @@ export let getClass = () => {
   return Axios.get("http://localhost:8998/getClass");
 };
 // 销毁一个班级
-export let delClass = (id) => {
+export let delClass = id => {
   return Axios.post("http://localhost:8998/delClass", { _id: id });
 };
 // 创建班级
-export let createClass = (data) => {
+export let createClass = data => {
   return Axios.post("http://localhost:8998/createClass", data);
 };
 // 修改班级
-export let updateClass = (data) => {
+export let updateClass = data => {
   return Axios.post("http://localhost:8998/updateClass", data);
 };

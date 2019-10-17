@@ -41,7 +41,7 @@
       >
         <div>班级：</div>
         <el-select v-model="newclass" size="mini" placeholder="班级">
-          <el-option size="mini" v-for="item in classs" :key="item.value" :value="item.value"></el-option>
+          <el-option size="mini" v-for="item in classs" :key="item" :value="item"></el-option>
         </el-select>
       </div>
       <div
@@ -49,7 +49,7 @@
       >
         <div>市场部:</div>
         <el-select v-model="cityCenter" size="mini" placeholder="市场部">
-          <el-option size="mini" v-for="item in cityCenters" :key="item.value" :value="item.value"></el-option>
+          <el-option size="mini" v-for="item in cityCenters" :key="item" :value="item"></el-option>
         </el-select>
       </div>
       <div
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { addAllStudent } from "@/api/api";
+import { addAllStudent, getMarket, getClass } from "@/api/api";
 export default {
   data() {
     return {
@@ -117,28 +117,22 @@ export default {
           value: "视觉设计"
         }
       ],
-      classs: [
-        //班级选项
-        {
-          value: "野码工作室"
-        },
-        {
-          value: "SEEC"
-        },
-        {
-          value: "1612B"
-        }
-      ],
-      cityCenters: [
-        //市场部选项
-        {
-          value: "冀中市场部"
-        },
-        {
-          value: "豫皖市场部"
-        }
-      ]
+      classs: [], //班级选项
+      cityCenters: [] //市场部选项
     };
+  },
+  async created() {
+    let shichang = await getMarket();
+    let City = shichang.data.data.map(item => {
+      return item["marketname"];
+    });
+    this.cityCenters = City;
+
+    let classes = await getClass();
+    let Classs = classes.data.data.map(item => {
+      return item["classname"];
+    });
+    this.classs = Classs;
   },
   methods: {
     async addAllstudent() {
