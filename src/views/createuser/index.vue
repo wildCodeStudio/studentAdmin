@@ -40,14 +40,12 @@ import { Message } from "element-ui";
 import axios from "axios";
 export default {
   data() {
-    var checkAge = (rule, value, callback) => {
+    var checkName = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("账户不能为空"));
       }
-      if (
-        this.ruleForm.name !== "" &&
-        this.ruleForm.pass !== this.ruleForm.name.substring(12)
-      ) {
+      if (this.ruleForm.name !== "" && this.username !== value) {
+        this.username = value;
         this.ruleForm.pass = "";
         this.ruleForm.checkPass = "";
       }
@@ -63,6 +61,7 @@ export default {
           return callback(new Error("请输入密码"));
         }
         this.ruleForm.pass = this.ruleForm.name.substring(12);
+        this.ruleForm.checkPass = this.ruleForm.pass;
         return callback();
       } else {
         if (value.length < 6) {
@@ -79,10 +78,6 @@ export default {
         if (this.ruleForm.pass === "") {
           return callback(new Error("请先输入密码"));
         }
-        if (this.ruleForm.pass === this.ruleForm.name.substring(12)) {
-          this.ruleForm.checkPass = this.ruleForm.pass;
-          return callback();
-        }
         return callback(new Error("请再次输入密码"));
       } else if (value !== this.ruleForm.pass) {
         callback(new Error("两次输入密码不一致!"));
@@ -96,10 +91,12 @@ export default {
         pass: "",
         checkPass: ""
       },
+      username: "",
+
       rules: {
         pass: [{ validator: validatePass, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        name: [{ validator: checkAge, trigger: "blur" }]
+        name: [{ validator: checkName, trigger: "blur" }]
       }
     };
   },
