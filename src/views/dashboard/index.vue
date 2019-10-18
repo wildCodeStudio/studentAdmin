@@ -18,17 +18,12 @@
       </li>
       <li>
         <el-select v-model="search.serClasses" size="mini" placeholder="班级">
-          <el-option size="mini" v-for="item in upclasses" :key="item.value" :value="item.value"></el-option>
+          <el-option size="mini" v-for="item in upclasses" :key="item" :value="item"></el-option>
         </el-select>
       </li>
       <li>
         <el-select v-model="search.sercityCenter" size="mini" placeholder="市场部">
-          <el-option
-            size="mini"
-            v-for="item in upcityCenters"
-            :key="item.value"
-            :value="item.value"
-          ></el-option>
+          <el-option size="mini" v-for="item in upcityCenters" :key="item" :value="item"></el-option>
         </el-select>
       </li>
       <li>
@@ -116,12 +111,7 @@
         <template slot-scope="scope">
           <div v-if="scope.$index===updateShow">
             <el-select v-model="upclass" size="mini" placeholder="班级">
-              <el-option
-                size="mini"
-                v-for="item in upclasses"
-                :key="item.value"
-                :value="item.value"
-              ></el-option>
+              <el-option size="mini" v-for="item in upclasses" :key="item" :value="item"></el-option>
             </el-select>
           </div>
           <div v-else>{{tableData[scope.$index].classes}}</div>
@@ -131,12 +121,7 @@
         <template slot-scope="scope">
           <div v-if="scope.$index===updateShow">
             <el-select v-model="upcityCenter" size="mini" placeholder="市场部">
-              <el-option
-                size="mini"
-                v-for="item in upcityCenters"
-                :key="item.value"
-                :value="item.value"
-              ></el-option>
+              <el-option size="mini" v-for="item in upcityCenters" :key="item" :value="item"></el-option>
             </el-select>
           </div>
           <div v-else>{{tableData[scope.$index].citycenter}}</div>
@@ -213,7 +198,7 @@
       layout="prev, pager, next"
       :total="total"
     ></el-pagination>
-    <div style="position:absolute;right:0;top:450px;right:10px;">
+    <div style="position:absolute;right:0;top:521px;right:10px;">
       <el-button size="mini" type="warning" round @click="excelShow">{{excelshow?"取消导入":"导入excel"}}</el-button>
       <el-button
         size="mini"
@@ -233,10 +218,13 @@
 <script>
 import {
   getAllPage,
+  inExcel,
   addAllStudent,
   delAllStudent,
   updateAllStudent,
-  selectAllstud
+  selectAllstud,
+  getMarket,
+  getClass
 } from "@/api/api";
 import UploadExcelComponent from "../../components/UploadExcel/index";
 export default {
@@ -293,32 +281,13 @@ export default {
         }
       ],
       upclass: "", //要修改的班级
-      upclasses: [
-        //班级选项
-        {
-          value: "野码工作室"
-        },
-        {
-          value: "SEEC"
-        },
-        {
-          value: "1612B"
-        }
-      ],
+      upclasses: [],
       upcityCenter: "", //要修改的市场部
-      upcityCenters: [
-        //市场部选项
-        {
-          value: "冀中市场部"
-        },
-        {
-          value: "豫皖市场部"
-        }
-      ],
+      upcityCenters: [],
       upchengji: "", //要修改的成绩
       upFail: "", //要修改的挂科次数
       searFail: [
-        //搜索成绩选项
+        //搜索挂科次数选项
         {
           value: "0次"
         },
@@ -337,27 +306,42 @@ export default {
     };
   },
   async created() {
+    let shichang = await getMarket();
+    let City = shichang.data.data.map(item => {
+      return item["marketname"];
+    });
+    this.upcityCenters = City;
+
+    let classes = await getClass();
+    let Classs = classes.data.data.map(item => {
+      return item["classname"];
+    });
+    this.upclasses = Classs;
     // this.tableData = await getAll()
     if (this.$route.params.maxpage) {
       // 判断有没有增加页面传过来的路由参数
       let allList = await getAllPage(this.$route.params.maxpage); //先根据传过来的路由参数请求一遍数据并赋值
       this.tableData = allList.data.data;
       this.listLoading = false;
-      this.total = allList.data.total;
-      if (this.tableData.length >= 7) {
-        //如果说数据的长度大于等于7则把传过来的路由参数+1作为参数请求一遍数据
-        let allList = await getAllPage(this.$route.params.maxpage + 1);
-        this.tableData = allList.data.data; //数据重新赋值
-        this.listLoading = false;
-        this.total = allList.data.total; //总数量重新赋值
-        this.currentPage = this.$route.params.maxpage + 1; //页数重新赋值
+      if (Math.ceil(allList.data.total / this.currentPage) > 7) {
+        //如果说你拿到的数据总长度除去当前页数得到的值大于7了，就说明当前页数据条数超过7条了，就请求下一页的数据
+        getAllPage(this.currentPage + 1).then(ress => {
+          this.tableData = ress.data.data;
+          this.currentPage = this.currentPage + 1;
+          this.total = ress.data.total;
+          if (this.currentPage != ress.data.delpage) {
+            //如果你下一页的页数还是不等于后端返回给你的总数据的最大页数，就请求总数据的最大页数并且重新给页数赋值
+            getAllPage(ress.data.delpage).then(ress => {
+              this.tableData = ress.data.data;
+              this.currentPage = ress.data.delpage;
+              this.total = ress.data.total;
+            });
+          }
+        });
       } else {
-        //否则的说明长度没超过当前页所允许的最大页数7，则正常进行请求赋值
-        let allList = await getAllPage(this.$route.params.maxpage);
         this.tableData = allList.data.data;
-        this.listLoading = false;
+        this.currentPage = allList.data.delpage; //拿取到后端传输的最新的currentPage以及总条数tota实现分页的对应
         this.total = allList.data.total;
-        this.currentPage = this.$route.params.maxpage;
       }
     } else {
       //没传则默认请求第一页的数据
@@ -541,7 +525,8 @@ export default {
     },
     handleSuccess({ results, header }) {
       let obj;
-      results.map(async item => {
+      let arrs = [];
+      results.map(item => {
         obj = {
           name: item["姓名"],
           sex: item["性别"],
@@ -553,23 +538,33 @@ export default {
           chengji: item["成绩"],
           failss: item["挂科次数"]
         };
-        let success = await addAllStudent(obj);
-        if (success.data.code === 201) {
-          this.$message.error(success.data.msg);
+        arrs.push(obj);
+      });
+      inExcel(arrs).then(res => {
+        if (res.data.code === 201) {
+          this.$message.error(res.data.msg);
         } else {
           this.$message({
-            message: success.data.msg,
+            message: res.data.msg,
             type: "success"
           });
           getAllPage(this.currentPage).then(res => {
             //导入的时候先请求一下实时获取最新的tableData数据进行赋值，再进行判断当前页数是否超过了七条。（防止tableData的值不实时跟新）
             this.tableData = res.data.data;
-            if (res.data.total / this.currentPage > 7) {
+            if (Math.ceil(res.data.total / this.currentPage) > 7) {
               //如果说你拿到的数据总长度除去当前页数得到的值大于7了，就说明当前页数据条数超过7条了，就请求下一页的数据
               getAllPage(this.currentPage + 1).then(ress => {
                 this.tableData = ress.data.data;
-                this.currentPage = ress.data.delpage;
+                this.currentPage = this.currentPage + 1;
                 this.total = ress.data.total;
+                if (this.currentPage != ress.data.delpage) {
+                  //如果你下一页的页数还是不等于后端返回给你的总数据的最大页数，就请求总数据的最大页数并且重新给页数赋值
+                  getAllPage(ress.data.delpage).then(ress => {
+                    this.tableData = ress.data.data;
+                    this.currentPage = ress.data.delpage;
+                    this.total = ress.data.total;
+                  });
+                }
               });
             } else {
               this.tableData = res.data.data;
@@ -578,8 +573,6 @@ export default {
             }
           });
         }
-
-        // console.log(this.tableData.length);
       });
     },
     // 修改内容显示函数
@@ -659,10 +652,12 @@ export default {
         let success = await updateAllStudent(_id, obj);
         if (success.data.code === 200) {
           this.$message.success(success.data.msg);
-          this.tableData[scope.$index] = obj;
+          getAllPage(this.currentPage).then(res => {
+            this.tableData = res.data.data;
+          });
           this.updateShow = 10000;
         } else {
-          this.$message.error("更新失败，请检查");
+          this.$message.error("修改失败，请重试");
           return false;
         }
       }
