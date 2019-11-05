@@ -109,6 +109,7 @@ export default {
       allstudent: 10
     };
   },
+
   async mounted() {
     // 获取学生总人数
     let { data } = await getAll();

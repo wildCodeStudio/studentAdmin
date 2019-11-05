@@ -11,7 +11,8 @@
                        prop="college"></el-table-column>
       <el-table-column label="入职日期"
                        prop="entryDate"></el-table-column>
-      <el-table-column align="right">
+      <el-table-column align="right"
+                       v-if="power">
         <template slot-scope="scope">
           <el-button size="mini"
                      type="danger"
@@ -26,6 +27,7 @@
 <script>
 import { getHeadTeacher, delHeadTeacher } from "@/api/api";
 import UploadExcelComponent from "../../components/UploadExcel/index";
+import { mapGetters } from "vuex";
 export default {
   name: "UploadExcel",
   components: { UploadExcelComponent },
@@ -33,8 +35,17 @@ export default {
     return {
       listLoading: true, //加载状态
       tableData: [], //所有学生数据
-      search: "" //搜索的model绑定值
+      search: "", //搜索的model绑定值
+      power: false
     };
+  },
+  computed: {
+    ...mapGetters(["roles"])
+  },
+  created() {
+    if (this.roles.includes("vvv")) {
+      this.power = true;
+    }
   },
   async mounted() {
     let { data } = await getHeadTeacher();

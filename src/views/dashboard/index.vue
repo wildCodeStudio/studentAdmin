@@ -40,7 +40,7 @@
       </li>
     </div>
     <!-- 显示模块 -->
-    <div style="margin-left:95%;">
+    <div style="margin-left:95%;" v-if="power">
       <el-button size="small" type="text" @click="chekout">{{chekShow?"取消":"批量删除"}}</el-button>
     </div>
     <el-table
@@ -149,7 +149,7 @@
           <div v-else>{{tableData[scope.$index].failss}}</div>
         </template>
       </el-table-column>
-      <el-table-column align="center">
+      <el-table-column align="center" v-if="power">
         <template slot="header" slot-scope="scope">操作</template>
         <template slot-scope="scope">
           <el-button
@@ -166,7 +166,7 @@
           <el-button v-if="searchShow===1" type="primary" size="small" @click="quxiaoSearch">返回</el-button>
           <el-button v-else type="success" size="small" @click="searchshow">查询</el-button>
         </template>
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="power">
           <el-button
             v-if="scope.$index===updateShow"
             size="mini"
@@ -227,6 +227,7 @@ import {
   getClass
 } from "@/api/api";
 import UploadExcelComponent from "../../components/UploadExcel/index";
+import { mapGetters } from "vuex";
 export default {
   name: "UploadExcel",
   components: { UploadExcelComponent },
@@ -302,10 +303,17 @@ export default {
         }
       ],
       checkeds: [], //批量删除中存放每一项_id的容器
-      chekShow: false //多选框(批量删除)是否显示
+      chekShow: false, //多选框(批量删除)是否显示
+      power: false
     };
   },
+  computed: {
+    ...mapGetters(["roles"])
+  },
   async created() {
+    if (this.roles.includes("vvv")) {
+      this.power = true;
+    }
     let shichang = await getMarket();
     let City = shichang.data.data.map(item => {
       return item["marketname"];

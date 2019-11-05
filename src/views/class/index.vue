@@ -29,11 +29,13 @@
         </template>
       </el-table-column>
       <el-table-column align="right">
-        <template slot="header">
+        <template slot="header"
+                  v-if="power">
           <el-button size="mini"
                      type="primary">查询</el-button>
         </template>
-        <template slot-scope="scope">
+        <template slot-scope="scope"
+                  v-if="power">
           <el-button size="mini"
                      type="primary"
                      v-show="isUpdate===scope.row._id"
@@ -58,6 +60,7 @@
 
 <script>
 import { getClass, delClass, updateClass } from "@/api/api";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -68,8 +71,17 @@ export default {
         lecturer: "",
         headteacher: ""
       },
-      search: "" //搜索的model绑定值
+      search: "", //搜索的model绑定值
+      power: false
     };
+  },
+  computed: {
+    ...mapGetters(["roles"])
+  },
+  created() {
+    if (this.roles.includes("vvv")) {
+      this.power = true;
+    }
   },
   async mounted() {
     let { data } = await getClass();
